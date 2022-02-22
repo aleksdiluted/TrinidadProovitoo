@@ -8,7 +8,7 @@
     </div>
   </div>
 </template>
-See on Aleksei Gornevi proovitöö, mis on loodud Vue.js abil.
+
 <script>
 // @ is an alias to /src
 // import HelloWorld from '@/components/HelloWorld.vue'

@@ -11,7 +11,6 @@
       <img src="https://midaiganes.irw.ee/api/imgs/medium/344b02d7.jpg">
       <br> <br>
       <p2>{{ resultBody }}</p2>
-
       <hr>
     </div>
   </div>
@@ -24,7 +23,7 @@ export default {
     return {
       resultTitle: '',
       resultIntro: '',
-      resultPicture: '',
+      // resultPicture: '',
       resultBody: '',
       responseAvailable: true,
     }
@@ -35,7 +34,7 @@ export default {
           .then(response => {
             this.resultTitle = response.data.title
             this.resultIntro = response.data.intro
-            this.resultPicture = response.data.image.medium
+            // this.resultPicture = response.data.image.medium
             this.resultBody = response.data.body
             console.log(response.data.id)
             console.log(response.data.title)
