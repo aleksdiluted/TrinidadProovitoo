@@ -1,17 +1,23 @@
 <template>
   <div class="article">
-    <h1>TWN artikkel</h1>
-    <button v-on:click="loadApiData">Lae Api</button>
-    <div v-if="responseAvailable">
-      <hr>
-      <p>
-      <h1>{{ resultTitle }}</h1> <br>
-      <h2>{{ resultIntro }}</h2>
-      <br> <br>
-      <img src="https://midaiganes.irw.ee/api/imgs/medium/344b02d7.jpg">
-      <br> <br>
-      <p2>{{ resultBody }}</p2>
-      <hr>
+    <div class="grid-container">
+      <div id="left"></div>
+      <div v-if="responseAvailable" id="center">
+        <div class="title">
+          <h1>{{ resultTitle }}</h1>
+        </div>
+        <br>
+        <div class="text">
+          <h3 v-html="resultIntro"></h3>
+          <br>
+          <br>
+          <img src="https://midaiganes.irw.ee/api/imgs/medium/344b02d7.jpg">
+          <br>
+          <br>
+          <span v-html="resultBody"></span>
+        </div>
+      </div>
+      <div id="right"></div>
     </div>
   </div>
 </template>
@@ -23,7 +29,6 @@ export default {
     return {
       resultTitle: '',
       resultIntro: '',
-      // resultPicture: '',
       resultBody: '',
       responseAvailable: true,
     }
@@ -34,7 +39,6 @@ export default {
           .then(response => {
             this.resultTitle = response.data.title
             this.resultIntro = response.data.intro
-            // this.resultPicture = response.data.image.medium
             this.resultBody = response.data.body
             console.log(response.data.id)
             console.log(response.data.title)
@@ -42,10 +46,37 @@ export default {
         console.log(error)
       })
     }
+  },
+  beforeMount() {
+    this.loadApiData()
   }
 }
 </script>
 
 <style scoped>
+.grid-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr;
+  gap: 0px 0px;
+  grid-template-areas:
+    ". . .";
+}
 
+@font-face {
+  font-family: "BoosterNextFY";
+  src: url("/src/assets") format("woff2");
+}
+
+div.title {
+  font-family: BoosterNextFY;
+  text-transform: uppercase;
+}
+
+div.text {
+  font-family: BoosterNextFY;
+  text-align: center;
+  text-align: justify;
+  text-justify: inter-word;
+}
 </style>
