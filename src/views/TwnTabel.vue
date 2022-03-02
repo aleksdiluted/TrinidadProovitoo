@@ -7,10 +7,10 @@
         <table class="table table-striped">
           <thead>
           <tr>
-            <th @click="sort('user.firstname')">Eesnimi</th>
-            <th>Perekonnanimi</th>
-            <th>Sugu</th>
-            <th>Sünnikuupäev</th>
+            <th v-on:click="sort('user.firstname')">Eesnimi</th>
+            <th @click="sort('user.surname')">Perekonnanimi</th>
+            <th @click="sort('user.sex')">Sugu</th>
+            <th @click="sort('user.birthday')">Sünnikuupäev</th>
             <th>Telefon</th>
           </tr>
           </thead>
@@ -27,6 +27,10 @@
           </tr>
           </tbody>
         </table>
+        <p>
+          <button v-on:click="prevPage">Previous</button>
+          <button v-on:click="nextPage">Next</button>
+        </p>
       </div>
       <div id="right"></div>
     </div>
@@ -38,8 +42,12 @@ export default {
   name: "TwnTabel",
   data: function () {
     return {
-      result: '',
+      // result: '',
       list: {},
+      currentSort: 'firstname',
+      currentSortDir: 'asc',
+      pageSize: 10,
+      currentPage: 1
     }
   },
   methods: {
@@ -52,6 +60,34 @@ export default {
         console.log(error)
       })
     },
+    sort: function (s) {
+      //if s == current sort, reverse
+      if (s === this.currentSort) {
+        this.currentSortDir = this.currentSortDir === 'asc' ? 'desc' : 'asc';
+      }
+      this.currentSort = s;
+    },
+    nextPage:function() {
+      if((this.currentPage*this.pageSize) < this.list.length) this.currentPage++;
+    },
+    prevPage:function() {
+      if(this.currentPage > 1) this.currentPage--;
+    }
+  },
+  computed: {
+    sortedNames: function () {
+      return this.list.sort((a, b) => {
+        let modifier = 1;
+        if (this.currentSortDir === 'desc') modifier = -1;
+        if (a[this.currentSort] < b[this.currentSort]) return -1 * modifier;
+        if (a[this.currentSort] > b[this.currentSort]) return 1 * modifier;
+        return 0;
+      }).filter((row, index) => {
+        let start = (this.currentPage-1)*this.pageSize;
+        let end = this.currentPage*this.pageSize;
+        if(index >= start && index < end) return true;
+      });
+    }
   },
   beforeMount() {
     this.loadTableApiData()
